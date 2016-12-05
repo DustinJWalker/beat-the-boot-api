@@ -10,7 +10,7 @@ class UserController {
   get createRules() {
     return {
       email: 'required|email|unique:users',
-      password: 'required|confirmed',
+      password: 'required',
     };
   }
 
@@ -21,6 +21,9 @@ class UserController {
   }
 
   * index(request, response) {
+    if (request.input('current')) {
+      response.jsonApi('User', request.authUser);
+    }
     const users = yield User.with().fetch();
 
     response.jsonApi('User', users);
