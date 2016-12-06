@@ -3,7 +3,7 @@
 const User = use('App/Model/User');
 
 const Hash = use('Hash');
-const attributes = ['email', 'password', 'password-confirmation'];
+const attributes = ['email', 'password', 'is-shop-owner', 'name'];
 
 class UserController {
 

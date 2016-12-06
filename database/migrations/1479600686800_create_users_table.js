@@ -8,6 +8,7 @@ class UsersTableSchema extends Schema {
     this.create('users', (table) => {
       table.increments();
       // table.string('username', 80).notNullable().unique()
+      table.string('name', 254);
       table.string('email', 254).notNullable().unique();
       table.string('password', 60).notNullable();
       table.boolean('is_shop_owner').default(false);
