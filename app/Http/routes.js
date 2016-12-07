@@ -24,9 +24,11 @@ Route.resource('/api/users', 'UserController')
   .middleware('auth');
 
 Route.resource('/api/shops', 'ShopController')
-  .except(['create', 'edit']);
+  .except(['create', 'edit'])
+  .middleware('auth');
 
 Route.resource('/api/drinks', 'DrinkController')
-  .except(['create', 'edit']);
+  .except(['create', 'edit'])
+  .middleware('auth');
 
 Route.post('/api/token-auth', 'SessionController.store');
