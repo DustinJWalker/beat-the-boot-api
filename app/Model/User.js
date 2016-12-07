@@ -8,6 +8,9 @@ class User extends Lucid {
   apiTokens() {
     return this.hasMany('App/Model/Token');
   }
+  shop() {
+    return this.hasOne('App/Model/Shop');
+  }
 
   static get unguarded() {
     return false;
