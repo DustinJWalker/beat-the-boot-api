@@ -1,6 +1,7 @@
 'use strict';
 
 const Shop = use('App/Model/Shop');
+const snakeCaseKeys = require('snakecase-keys');
 const attributes = ['name', 'description', 'picture', 'street', 'city', 'state', 'zip', 'parking', 'phone'];
 
 class ShopController {
@@ -13,6 +14,33 @@ class ShopController {
 
   * store(request, response) {
     const input = request.jsonApi.getAttributesSnakeCase(attributes);
+
+    const profilePic = request.file('uploadFile', {
+      maxSize: '10mb',
+      allowedExtensions: ['jpg', 'png', 'jpeg'],
+    });
+
+    if (profilePic && profilePic.exists()) {
+      const attrs = snakeCaseKeys(request.all());
+
+      yield File.upload(profilePic.clientName(), profilePic);
+
+      const foreignKeys = {
+        user_id: request.currentUser.id,
+      };
+      const shop = yield Shop.create(Object.assign({}, attrs, foreignKeys));
+
+      attrs.profile_pic_url = profilePic.clientName();
+      attrs.profile_pic_extension = profilePic.extension();
+
+      shop.fill(attrs);
+      yield shop.save();
+
+      return response.jsonApi('Shop', shop);
+    }
+
+    yield request.jsonApi.assertValid(input, this.createRules, this.createMessages);
+
     const foreignKeys = {
       user_id: request.currentUser.id,
     };
@@ -29,18 +57,38 @@ class ShopController {
   }
 
   * update(request, response) {
+    const profilePic = request.file('uploadFile', {
+      maxSize: '10mb',
+      allowedExtensions: ['jpg', 'png', 'jpeg'],
+    });
+
     const id = request.param('id');
+    const shop = yield Shop.with('drink', 'user').where({ id }).firstOrFail();
+
+    if (profilePic && profilePic.exists()) {
+      const attrs = snakeCaseKeys(request.all());
+
+      yield File.upload(profilePic.clientName(), profilePic);
+
+      attrs.profile_pic_url = profilePic.clientName();
+      attrs.profile_pic_extension = profilePic.extension();
+
+      shop.fill(attrs);
+      yield shop.save();
+
+      return response.jsonApi('Shop', shop);
+    }
+
     request.jsonApi.assertId(id);
 
     const input = request.jsonApi.getAttributesSnakeCase(attributes);
     const foreignKeys = {
     };
 
-    const shop = yield Shop.with('drink', 'user').where({ id }).firstOrFail();
     shop.fill(Object.assign({}, input, foreignKeys));
     yield shop.save();
 
-    response.jsonApi('Shop', shop);
+    response.jsonApi('User', shop);
   }
 
   * destroy(request, response) {
