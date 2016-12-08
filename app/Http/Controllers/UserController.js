@@ -22,9 +22,12 @@ class UserController {
 
   * index(request, response) {
     if (request.input('current')) {
-      response.jsonApi('User', request.authUser);
+      const user = request.authUser;
+      yield user.related('shop').load();
+
+      response.jsonApi('User', user);
     }
-    const users = yield User.with().fetch();
+    const users = yield User.with('shop').fetch();
 
     response.jsonApi('User', users);
   }
@@ -44,7 +47,7 @@ class UserController {
 
   * show(request, response) {
     const id = request.param('id');
-    const user = yield User.with().where({ id }).firstOrFail();
+    const user = yield User.with('shop').where({ id }).firstOrFail();
 
     response.jsonApi('User', user);
   }
@@ -57,7 +60,7 @@ class UserController {
     const foreignKeys = {
     };
 
-    const user = yield User.with().where({ id }).firstOrFail();
+    const user = yield User.with('shop').where({ id }).firstOrFail();
     user.fill(Object.assign({}, input, foreignKeys));
     yield user.save();
 
