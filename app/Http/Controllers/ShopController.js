@@ -1,6 +1,7 @@
 'use strict';
 
 const Shop = use('App/Model/Shop');
+const File = use('File');
 const snakeCaseKeys = require('snakecase-keys');
 const attributes = ['name', 'description', 'picture', 'street', 'city', 'state', 'zip', 'parking', 'phone'];
 
@@ -13,8 +14,6 @@ class ShopController {
   }
 
   * store(request, response) {
-    const input = request.jsonApi.getAttributesSnakeCase(attributes);
-
     const profilePic = request.file('uploadFile', {
       maxSize: '10mb',
       allowedExtensions: ['jpg', 'png', 'jpeg'],
@@ -39,6 +38,7 @@ class ShopController {
       return response.jsonApi('Shop', shop);
     }
 
+    const input = request.jsonApi.getAttributesSnakeCase(attributes);
     yield request.jsonApi.assertValid(input, this.createRules, this.createMessages);
 
     const foreignKeys = {
