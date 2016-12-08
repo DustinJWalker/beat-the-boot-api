@@ -13,8 +13,10 @@ class DrinkController {
 
   * store(request, response) {
     const input = request.jsonApi.getAttributesSnakeCase(attributes);
+    const shop = yield request.authUser.shop().fetch();
+
     const foreignKeys = {
-      shop_id: request.jsonApi.getRelationId('shop'),
+      shop_id: shop.id,
     };
     const drink = yield Drink.create(Object.assign({}, input, foreignKeys));
 
@@ -33,8 +35,10 @@ class DrinkController {
     request.jsonApi.assertId(id);
 
     const input = request.jsonApi.getAttributesSnakeCase(attributes);
+    const shop = yield request.authUser.shop().fetch();
+
     const foreignKeys = {
-      shop_id: request.jsonApi.getRelationId('shop'),
+      shop_id: shop.id,
     };
 
     const drink = yield Drink.with('shop').where({ id }).firstOrFail();

@@ -8,6 +8,9 @@ class User extends Lucid {
   apiTokens() {
     return this.hasMany('App/Model/Token');
   }
+  shop() {
+    return this.hasOne('App/Model/Shop');
+  }
 
   shop() {
     return this.hasOne('App/Model/Shop', 'id', 'user_id');
