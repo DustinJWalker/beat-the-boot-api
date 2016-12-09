@@ -25,8 +25,9 @@ class UserController {
       const user = request.authUser;
       yield user.related('shop').load();
 
-      response.jsonApi('User', user);
+      return response.jsonApi('User', user);
     }
+
     const users = yield User.with('shop').fetch();
 
     response.jsonApi('User', users);
