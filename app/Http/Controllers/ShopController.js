@@ -8,7 +8,7 @@ const attributes = ['name', 'description', 'picture', 'street', 'city', 'state',
 class ShopController {
 
   * index(request, response) {
-    const shops = yield Shop.with('drink', 'user').fetch();
+    const shops = yield Shop.with('drinks', 'user').fetch();
 
     response.jsonApi('Shop', shops);
   }
@@ -51,7 +51,7 @@ class ShopController {
 
   * show(request, response) {
     const id = request.param('id');
-    const shop = yield Shop.with('drink', 'user').where({ id }).firstOrFail();
+    const shop = yield Shop.with('drinks', 'user').where({ id }).firstOrFail();
 
     response.jsonApi('Shop', shop);
   }
@@ -63,7 +63,7 @@ class ShopController {
     });
 
     const id = request.param('id');
-    const shop = yield Shop.with('drink', 'user').where({ id }).firstOrFail();
+    const shop = yield Shop.with('drinks', 'user').where({ id }).firstOrFail();
 
     if (profilePic && profilePic.exists()) {
       const attrs = snakeCaseKeys(request.all());

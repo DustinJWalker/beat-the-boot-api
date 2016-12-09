@@ -1,11 +1,11 @@
-'use strict'
+'use strict';
 
-const Lucid = use('Lucid')
+const Lucid = use('Lucid');
 
 class Shop extends Lucid {
 
 
-  drink() {
+  drinks() {
     return this.hasMany('App/Model/Drink', 'id', 'shop_id');
   }
   user() {
@@ -13,4 +13,4 @@ class Shop extends Lucid {
   }
 }
 
-module.exports = Shop
+module.exports = Shop;
