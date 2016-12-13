@@ -1,12 +1,12 @@
 'use strict';
 
 const Order = use('App/Model/Order');
-const attributes = ['belongsTo', 'belongsTo'];
+const attributes = [];
 
 class OrderController {
 
   * index(request, response) {
-    const orders = yield Order.with('lineItems').fetch();
+    const orders = yield Order.with('shop', 'user', 'lineItems.drink').fetch();
 
     response.jsonApi('Order', orders);
   }
@@ -14,6 +14,8 @@ class OrderController {
   * store(request, response) {
     const input = request.jsonApi.getAttributesSnakeCase(attributes);
     const foreignKeys = {
+      shop_id: request.jsonApi.getRelationId('shop'),
+      user_id: request.currentUser.id,
     };
     const order = yield Order.create(Object.assign({}, input, foreignKeys));
 
@@ -22,7 +24,7 @@ class OrderController {
 
   * show(request, response) {
     const id = request.param('id');
-    const order = yield Order.with('lineItems').where({ id }).firstOrFail();
+    const order = yield Order.with('shop', 'user', 'lineItems.drink').where({ id }).firstOrFail();
 
     response.jsonApi('Order', order);
   }
@@ -33,9 +35,11 @@ class OrderController {
 
     const input = request.jsonApi.getAttributesSnakeCase(attributes);
     const foreignKeys = {
+      shop_id: request.jsonApi.getRelationId('shop'),
+      user_id: request.currentUser.id,
     };
 
-    const order = yield Order.with('lineItems').where({ id }).firstOrFail();
+    const order = yield Order.with('shop', 'user', 'lineItems.drink').where({ id }).firstOrFail();
     order.fill(Object.assign({}, input, foreignKeys));
     yield order.save();
 

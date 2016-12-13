@@ -22,6 +22,12 @@ class Shop extends JsonApiView {
       excludeRelation: 'shop',
     });
   }
+  orders() {
+    return this.hasMany('App/Http/JsonApiViews/Order', {
+      included: false,
+      excludeRelation: 'shop',
+    });
+  }
 
   user() {
     return this.belongsTo('App/Http/JsonApiViews/User', {

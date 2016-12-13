@@ -7,8 +7,8 @@ class OrderSchema extends Schema {
   up() {
     this.create('orders', (table) => {
       table.increments();
-      table.user('belongsTo');
-      table.shop('belongsTo');
+      table.integer('shop_id').references('shops.id');
+      table.integer('user_id').references('users.id');
       
       table.timestamps();
     });

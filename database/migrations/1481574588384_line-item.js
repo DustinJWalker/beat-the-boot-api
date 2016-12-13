@@ -7,10 +7,10 @@ class LineItemSchema extends Schema {
   up() {
     this.create('line_items', (table) => {
       table.increments();
-      table.drink('belongsTo');
-      table.order('belongsTo');
-      table.float('price');
+      table.integer('order_id').references('orders.id');
+      table.integer('drink_id').references('drinks.id');
       table.integer('quantity');
+      table.float('price');
       table.timestamps();
     });
   }

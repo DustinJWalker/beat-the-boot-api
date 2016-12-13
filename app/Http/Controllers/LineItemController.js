@@ -1,12 +1,12 @@
 'use strict';
 
 const LineItem = use('App/Model/LineItem');
-const attributes = ['belongsTo', 'belongsTo', 'price', 'quantity'];
+const attributes = ['quantity', 'price'];
 
 class LineItemController {
 
   * index(request, response) {
-    const lineItems = yield LineItem.with().fetch();
+    const lineItems = yield LineItem.with('order').fetch();
 
     response.jsonApi('LineItem', lineItems);
   }
@@ -14,6 +14,8 @@ class LineItemController {
   * store(request, response) {
     const input = request.jsonApi.getAttributesSnakeCase(attributes);
     const foreignKeys = {
+      order_id: request.jsonApi.getRelationId('order'),
+      drink_id: request.jsonApi.getRelationId('drink'),
     };
     const lineItem = yield LineItem.create(Object.assign({}, input, foreignKeys));
 
@@ -22,7 +24,7 @@ class LineItemController {
 
   * show(request, response) {
     const id = request.param('id');
-    const lineItem = yield LineItem.with().where({ id }).firstOrFail();
+    const lineItem = yield LineItem.with('order').where({ id }).firstOrFail();
 
     response.jsonApi('LineItem', lineItem);
   }
@@ -33,9 +35,11 @@ class LineItemController {
 
     const input = request.jsonApi.getAttributesSnakeCase(attributes);
     const foreignKeys = {
+      order_id: request.jsonApi.getRelationId('order'),
+      drink_id: request.jsonApi.getRelationId('drink'),
     };
 
-    const lineItem = yield LineItem.with().where({ id }).firstOrFail();
+    const lineItem = yield LineItem.with('order').where({ id }).firstOrFail();
     lineItem.fill(Object.assign({}, input, foreignKeys));
     yield lineItem.save();
 
