@@ -24,7 +24,7 @@ class UserController {
     if (request.input('current')) {
       const user = request.authUser;
 
-      yield user.related('shop').load();
+      yield user.related('shop.drinks', 'shop.orders').load();
 
       return response.jsonApi('User', request.authUser);
     }
