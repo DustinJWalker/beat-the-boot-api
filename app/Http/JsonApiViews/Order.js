@@ -2,7 +2,21 @@ const JsonApiView = require('adonis-jsonapi/src/JsonApiView');
 
 class Order extends JsonApiView {
   get attributes() {
-    return ['belongsTo', 'belongsTo'];
+    return [];
+  }
+
+  shop() {
+    return this.belongsTo('App/Http/JsonApiViews/Shop', {
+      included: true,
+      excludeRelation: 'orders'
+    });
+  }
+
+  user() {
+    return this.belongsTo('App/Http/JsonApiViews/User', {
+      included: true,
+      excludeRelation: 'orders'
+    });
   }
 
   lineItems() {
