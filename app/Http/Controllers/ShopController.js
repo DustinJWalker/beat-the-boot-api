@@ -88,7 +88,7 @@ class ShopController {
     shop.fill(Object.assign({}, input, foreignKeys));
     yield shop.save();
 
-    response.jsonApi('User', shop);
+    response.jsonApi('Shop', shop);
   }
 
   * destroy(request, response) {

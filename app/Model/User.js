@@ -12,10 +12,6 @@ class User extends Lucid {
     return this.hasOne('App/Model/Shop');
   }
 
-  shop() {
-    return this.hasOne('App/Model/Shop', 'id', 'user_id');
-  }
-
   static get unguarded() {
     return false;
   }
@@ -24,6 +20,8 @@ class User extends Lucid {
     return [
       'email',
       'password',
+      'is_admin',
+      'is_shop_owner',
     ];
   }
 
