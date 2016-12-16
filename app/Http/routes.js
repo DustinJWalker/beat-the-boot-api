@@ -43,8 +43,11 @@ Route.post('/api/token-auth', 'SessionController.store');
 
 const File = use('File');
 
-Route.get('/uploads/~/*', function* (request, response) {
-  const stream = File.getStream(request.param(0));
+Route.get('/uploads/:id', function* (request, response) {
+  // return response.send(request.param('id'));
+
+
+  const stream = File.getStream(request.param('id'));
 
   stream.pipe(response.response);
 });
