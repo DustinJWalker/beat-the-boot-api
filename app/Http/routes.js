@@ -32,3 +32,11 @@ Route.resource('/api/drinks', 'DrinkController')
   .middleware('auth');
 
 Route.post('/api/token-auth', 'SessionController.store');
+
+const File = use('File');
+
+Route.get('/uploads/~/*', function* (request, response) {
+  const stream = File.getStream(request.param(0));
+
+  stream.pipe(response.response);
+});
