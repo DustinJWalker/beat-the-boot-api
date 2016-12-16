@@ -5,82 +5,33 @@ const Helpers = use('Helpers');
 
 module.exports = {
 
-  /*
-  |--------------------------------------------------------------------------
-  | Default Connection
-  |--------------------------------------------------------------------------
-  |
-  | Connection defines the default connection settings to be used while
-  | interacting with SQL databases.
-  |
-  */
-  connection: Env.get('DB_CONNECTION', 'sqlite'),
+  default: Env.get('FILE_DRIVER', 'local'),
 
-  /*
-  |--------------------------------------------------------------------------
-  | Sqlite
-  |--------------------------------------------------------------------------
-  |
-  | Sqlite is a flat file database and can be good choice under development
-  | environment.
-  |
-  | npm i --save sqlite3
-  |
-  */
-  sqlite: {
-    client: 'sqlite3',
-    connection: {
-      filename: Helpers.databasePath('development.sqlite'),
-    },
-    useNullAsDefault: true,
-  },
-
-  testing: {
-    client: 'sqlite3',
-    connection: {
-      filename: Helpers.databasePath('testing.sqlite'),
-    },
-    useNullAsDefault: true,
-  },
-
-  /*
-  |--------------------------------------------------------------------------
-  | Mysql
-  |--------------------------------------------------------------------------
-  |
-  | Here we define connection settings for Mysql database.
-  |
-  | npm i --save mysql
-  |
-  */
-  mysql: {
-    client: 'mysql',
-    connection: {
-      host: Env.get('DB_HOST', 'localhost'),
-      user: Env.get('DB_USER', 'root'),
-      password: Env.get('DB_PASSWORD', ''),
-      database: Env.get('DB_DATABASE', 'adonis'),
+  public: {
+    driver: 'local',
+    root: Helpers.publicPath('uploads'),
+    options: {
+      encoding: 'utf8',
     },
   },
 
-  /*
-  |--------------------------------------------------------------------------
-  | PostgreSQL
-  |--------------------------------------------------------------------------
-  |
-  | Here we define connection settings for Mysql database.
-  |
-  | npm i --save pg
-  |
-  */
-  pg: {
-    client: 'pg',
-    connection: Env.get('DATABASE_URL', {
-      host: Env.get('DB_HOST', 'localhost'),
-      user: Env.get('DB_USER', 'root'),
-      password: Env.get('DB_PASSWORD', ''),
-      database: Env.get('DB_DATABASE', 'adonis'),
-    }),
+  protected: {
+    driver: 'local',
+    root: Helpers.storagePath('app'),
+    options: {
+      encoding: 'utf8',
+    },
+  },
+
+  s3: {
+    driver: 'pkgcloud',
+    container: Env.get('S3_BUCKET'),
+    options: {
+      provider: 'amazon',
+      keyId: Env.get('S3_KEY'), // access key id
+      key: Env.get('S3_SECRET'), // secret key
+      region: Env.get('S3_REGION'), // region
+    },
   },
 
 };
